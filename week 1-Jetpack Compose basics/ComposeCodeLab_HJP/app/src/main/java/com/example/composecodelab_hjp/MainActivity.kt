@@ -1,5 +1,6 @@
 package com.example.composecodelab_hjp
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composecodelab_hjp.ui.theme.ComposeCodeLab_HJPTheme
@@ -53,7 +55,11 @@ fun Greeting(name: String) {
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
             ) {
                 Text(text = "Hello, ")
-                Text(text = name)
+                Text(
+                    text = name, style = MaterialTheme.typography.h4.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                )
             }
             OutlinedButton(onClick = { expanded.value = !expanded.value }) {
                 Text(if (expanded.value) "Show less" else "Show more")
@@ -62,37 +68,42 @@ fun Greeting(name: String) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    widthDp = 320,
+    uiMode = UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(showBackground = true, widthDp = 320)
 @Composable
 fun DefaultPreview() {
     ComposeCodeLab_HJPTheme {
-        Greeting("Android")
-    }
-}
-
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun MyApp() {
-    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
-
-    if(shouldShowOnboarding){
-        OnBoardingScreen(onContinueClicked = {shouldShowOnboarding = false})
-    }else{
         Greetings()
     }
 }
 
 @Composable
-private fun Greetings(names: List<String> = List(1000){"$it"}){
+fun MyApp() {
+    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
+
+    if (shouldShowOnboarding) {
+        OnBoardingScreen(onContinueClicked = { shouldShowOnboarding = false })
+    } else {
+        Greetings()
+    }
+}
+
+@Composable
+private fun Greetings(names: List<String> = List(1000) { "$it" }) {
     LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
-        items(items = names){ name ->
+        items(items = names) { name ->
             Greeting(name = name)
         }
     }
 }
 
 @Composable
-fun OnBoardingScreen(onContinueClicked : () -> Unit) {
+fun OnBoardingScreen(onContinueClicked: () -> Unit) {
 
     Surface {
         Column(
@@ -103,17 +114,18 @@ fun OnBoardingScreen(onContinueClicked : () -> Unit) {
             Text("Welcome to the Basics Codelab!")
             Button(
                 modifier = Modifier.padding(vertical = 24.dp),
-                onClick = onContinueClicked) {
+                onClick = onContinueClicked
+            ) {
                 Text("Continue")
             }
         }
     }
 }
 
-@Preview(showBackground = true, widthDp = 320,heightDp = 320)
+@Preview(showBackground = true, widthDp = 320, heightDp = 320)
 @Composable
-fun OnboardingPreview(){
-    ComposeCodeLab_HJPTheme{
+fun OnboardingPreview() {
+    ComposeCodeLab_HJPTheme {
         OnBoardingScreen(onContinueClicked = {})
     }
 }
